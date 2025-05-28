@@ -3,7 +3,6 @@
 #
 ##Noam Hadad 322766064
 ##Guedalia Sebbah 337966659
-
 import math
 from myboolfuncs import *
 import random
