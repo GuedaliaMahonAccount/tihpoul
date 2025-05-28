@@ -142,8 +142,6 @@ def f3():
     # — for more than 4 —
     def middleOfBigList(nums):
         n = len(nums)
-        if n % 2:
-            raise ValueError("Need an even number of elements")
         s = sorted(nums)
         m = n // 2
         # sorted and manual if all values distinct
@@ -154,7 +152,7 @@ def f3():
     def filter_numbers(lst):
         return [x for x in lst if isinstance(x, (int, float))]
 
-    #main of f3
+    # main of f3
     print("Welcome to Middle Calculation")
     while True:
         print("\nChoose option:")
@@ -171,19 +169,29 @@ def f3():
             print("  middle values (without sort):", manual_mid)
 
         elif choice == "2":
-            raw = input("  enter numbers separated by spaces: ")
-            nums = [float(x) for x in raw.split()]
-            sorted_pair, manual_pair = middleOfBigList(nums)
-            print("  middle values (with sorted()):", sorted_pair)
-            print("  middle values (manual):", manual_pair)
+            while True:
+                raw = input("  enter numbers separated by spaces: ")
+                nums = [float(x) for x in raw.split()]
+                if len(nums) % 2 != 0:
+                    print("  Need an even number of elements. Try again.")
+                    continue
+                sorted_pair, manual_pair = middleOfBigList(nums)
+                print("  middle values (with sorted()):", sorted_pair)
+                print("  middle values (manual):", manual_pair)
+                break
 
         elif choice == "3":
-            raw = input("  enter a Python-style list (e.g. [1, 'a', 2.5, None, 3]): ")
-            data = eval(raw)  # Assuming trusted input
-            nums = filter_numbers(data)
-            sorted_pair, manual_pair = middleOfBigList(nums)
-            print("  numeric middles (with sort):", sorted_pair)
-            print("  numeric middles (manual):", manual_pair)
+            while True:
+                raw = input("  enter a Python-style list (e.g. [1, 'a', 2.5, None, 3]): ")
+                data = eval(raw)  # Assuming trusted input
+                nums = filter_numbers(data)
+                if len(nums) % 2 != 0:
+                    print("  After filtering, need an even count of numbers—got", len(nums))
+                    continue
+                sorted_pair, manual_pair = middleOfBigList(nums)
+                print("  numeric middles (with sort):", sorted_pair)
+                print("  numeric middles (manual):", manual_pair)
+                break
 
         elif choice == "0":
             print("Goodbye from f3!")
@@ -295,7 +303,6 @@ def f5():
         'str': count_strs(data),
         'tuple': count_tuples(data)
     }
-    print("Type-count dictionary:", type_dict)
     total_records = type_dict['tuple']
     total_lists = type_dict['list']
     total_numbers = type_dict['int'] + type_dict['float']
