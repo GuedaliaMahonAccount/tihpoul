@@ -113,9 +113,9 @@ def f3():
 
     n = int(n_str)
     if isPalindrome(n):
-        print(f"{n} is a palindrome")
+        print(f" is a palindrome")
     else:
-        print(f"{n} is not a palindrome")
+        print(f" is not a palindrome")
 
 
 
@@ -123,7 +123,7 @@ def f3():
 # Question 4
 def f4():
     def m(n):
-        return sum(1/(i+1) for i in range(1, n+1))
+        return sum(map(lambda i: i/(i+1), range(1, n+1)))
 
     n_str = input("Enter a positive integer n: ")
     if not n_str.isdigit() or int(n_str) <= 0:
@@ -132,40 +132,42 @@ def f4():
 
     n = int(n_str)
     for i in range(1, n+1):
-        print(f"{i}: {m(i)}")
+        print(i, m(i))
 
 
 
 #
 # Question 5
 def f5():
-    import ast
-
     def add3dicts(d1, d2, d3):
-        result = {}
-        for d in (d1, d2, d3):
-            for k, v in d.items():
-                result[k] = result.get(k, 0) + v
-        return result
-
-    d1_str = input("Enter dict d1 (e.g. {'a':1, 'b':2}): ")
-    d2_str = input("Enter dict d2 (e.g. {'a':3, 'c':4}): ")
-    d3_str = input("Enter dict d3 (e.g. {'b':5, 'd':6}): ")
+        all_keys = set(d1) | set(d2) | set(d3)
+        merged = {}
+        for k in all_keys:
+            vals = []
+            if k in d1: vals.append(d1[k])
+            if k in d2: vals.append(d2[k])
+            if k in d3: vals.append(d3[k])
+            seen = []
+            for v in vals:
+                if v not in seen:
+                    seen.append(v)
+            merged[k] = seen[0] if len(seen) == 1 else tuple(seen)
+        return merged
 
     try:
-        d1 = ast.literal_eval(d1_str)
-        d2 = ast.literal_eval(d2_str)
-        d3 = ast.literal_eval(d3_str)
-    except (ValueError, SyntaxError):
-        print("ERROR: One of the inputs is not a valid dictionary!")
+        d1 = eval(input("Enter a dictionary: "))
+        d2 = eval(input("Enter a dictionary: "))
+        d3 = eval(input("Enter a dictionary: "))
+    except Exception:
+        print("ERROR: Input is incorrect!")
         return
 
     if not all(isinstance(d, dict) for d in (d1, d2, d3)):
-        print("ERROR: All inputs must be dictionaries!")
+        print("ERROR: Input is incorrect!")
         return
 
-    merged = add3dicts(d1, d2, d3)
-    print(merged)
+    result = add3dicts(d1, d2, d3)
+    print(result)
 
 
 
