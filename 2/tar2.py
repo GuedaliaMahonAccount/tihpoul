@@ -7,8 +7,9 @@
 
 
 
+
 #
-# Question 1
+# question 1
 def f1():
     # a
     def pentaNumRange(n1, n2):
@@ -77,8 +78,11 @@ def f1():
             print("  invalid choice, try again")
 
 
+
+
+
 #
-# Question 2
+# question 2
 def f2():
     def sumDigits(n):
         # take absolute value, convert to string, map each char back to int, and sum
@@ -96,8 +100,12 @@ def f2():
 
 
 
+
+
+
+
 #
-# Question 3
+# question 3
 def f3():
     def reverseNumber(n):
         s = str(abs(n))
@@ -119,8 +127,10 @@ def f3():
 
 
 
+
+
 #
-# Question 4
+# question 4
 def f4():
     def m(n):
         return sum(map(lambda i: i/(i+1), range(1, n+1)))
@@ -136,8 +146,13 @@ def f4():
 
 
 
+
+
+
+
+
 #
-# Question 5
+# question 5
 def f5():
     def add3dicts(d1, d2, d3):
         all_keys = set(d1) | set(d2) | set(d3)
@@ -171,6 +186,14 @@ def f5():
 
 
 
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     functions = {
         '1': f1,
@@ -200,7 +223,7 @@ if __name__ == '__main__':
             print("Bye!")
             break
         elif choice in functions:
-            print()  # blank line before running
+            print()
             functions[choice]()
         else:
             print("Invalid choice, try again.")
