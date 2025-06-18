@@ -9,9 +9,55 @@
 #   a) pure function pentaNumRange(n1, n2)
 #   b) imperative version: input, validate, print 10 per line
 #   c) fully functional version
+
 def f1():
-    # TODO: implement parts a, b, c of question 1 :contentReference[oaicite:0]{index=0}
-    pass
+    #aaaaaaaa
+    def pentaNumRange(n1, n2):
+        if n2 <= n1:
+            raise ValueError("n2 must be greater than n1")
+
+        getPentaNum = lambda n: int(0.5 * n * (3 * n - 1))
+
+        return [getPentaNum(i) for i in range(n1, n2)]
+
+    #bbbbbb
+    def part_b():
+        return
+
+
+
+    #cccccc
+    def part_c():
+        return
+
+
+    # sub-menu for f1
+    while True:
+        print("\nQuestion 1: Pentagonal-number range")
+        print("  a) pure pentaNumRange(n1,n2)")
+        print("  b) imperative (input, validate, print 10 per line)")
+        print("  c) fully functional")
+        print("  x) back to main menu")
+        choice = input("Choose part [a/b/c/x]: ").lower()
+
+        if choice == 'a':
+            n1 = int(input("  lower bound n1: "))
+            n2 = int(input("  upper bound n2: "))
+            result = pentaNumRange(n1, n2)
+            print("  →", result)
+
+        elif choice == 'b':
+            part_b()
+
+        elif choice == 'c':
+            part_c()
+
+        elif choice == 'x':
+            break
+
+        else:
+            print("  invalid choice, try again")
+
 
 #
 # Question 2: sumDigits
@@ -44,6 +90,10 @@ def f4():
 def f5():
     # TODO: implement question 5 :contentReference[oaicite:4]{index=4}
     pass
+
+
+
+
 
 if __name__ == '__main__':
     functions = {
