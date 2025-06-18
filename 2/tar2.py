@@ -4,54 +4,72 @@
 ## Noam Hadad 322766064
 ## Guedalia Sebbah 337966659
 
-#
-# Question 1: Pentagonal-number range
-#   a) pure function pentaNumRange(n1, n2)
-#   b) imperative version: input, validate, print 10 per line
-#   c) fully functional version
 
+
+
+#
+# Question 1
 def f1():
-    #aaaaaaaa
+    # a
     def pentaNumRange(n1, n2):
         if n2 <= n1:
             raise ValueError("n2 must be greater than n1")
 
-        getPentaNum = lambda n: int(0.5 * n * (3 * n - 1))
-
+        getPentaNum = lambda n: (n * (3 * n - 1)) // 2
         return [getPentaNum(i) for i in range(n1, n2)]
 
-    #bbbbbb
-    def part_b():
-        return
+    # b
+    def part_b_pentaNumRange():
+        n1 = int(input("Enter n1 (lower): "))
+        n2 = int(input("Enter n2 (upper): "))
 
+        if n1 <= 0 or n2 <= 0 or n2 <= n1:
+            print("ERROR: the values must be positive integers and n2 > n1")
+            return
 
+        def getPentaNum(n):
+            return (n * (3 * n - 1)) // 2
 
-    #cccccc
+        count = 0
+        for i in range(n1, n2):
+            print(getPentaNum(i), end='  ')
+            count += 1
+            if count % 10 == 0:
+                print()
+
+        if count % 10 != 0:
+            print()
+
+    # c
     def part_c():
-        return
+        n1 = int(input("Enter n1 (lower): "))
+        n2 = int(input("Enter n2 (upper): "))
 
+        if n1 <= 0 or n2 <= 0 or n2 <= n1:
+            print("ERROR: the values must be positive integers and n2 > n1.")
+            return
 
-    # sub-menu for f1
+        getPentaNum = lambda n: (n * (3 * n - 1)) // 2
+        numbers = list(map(getPentaNum, range(n1, n2)))
+        lines = [numbers[i:i + 10] for i in range(0, len(numbers), 10)]
+        list(map(lambda line: print("  ".join(map(str, line))), lines))
+
+    # menu for question 1
     while True:
         print("\nQuestion 1: Pentagonal-number range")
-        print("  a) pure pentaNumRange(n1,n2)")
         print("  b) imperative (input, validate, print 10 per line)")
         print("  c) fully functional")
         print("  x) back to main menu")
-        choice = input("Choose part [a/b/c/x]: ").lower()
+        choice = input("Choose part [b/c/x]: ").lower()
 
-        if choice == 'a':
+        if choice == 'b':
+            part_b_pentaNumRange()
+
+        elif choice == 'c':
             n1 = int(input("  lower bound n1: "))
             n2 = int(input("  upper bound n2: "))
             result = pentaNumRange(n1, n2)
             print("  →", result)
-
-        elif choice == 'b':
-            part_b()
-
-        elif choice == 'c':
-            part_c()
-
         elif choice == 'x':
             break
 
@@ -60,38 +78,94 @@ def f1():
 
 
 #
-# Question 2: sumDigits
-#   pure function sumDigits(n)
-#   then input, validate, print result
+# Question 2
 def f2():
-    # TODO: implement question 2 :contentReference[oaicite:1]{index=1}
-    pass
+    def sumDigits(n):
+        # take absolute value, convert to string, map each char back to int, and sum
+        return sum(map(int, str(abs(n))))
+
+    n_str = input("Enter an integer number n (positive or negative): ")
+    # manual validation instead of try/except
+    if not n_str.lstrip('-').isdigit():
+        print("ERROR: Input number is incorrect!")
+        return
+
+    n = int(n_str)
+    result = sumDigits(n)
+    print(result)
+
+
 
 #
-# Question 3: isPalindrome
-#   pure helper to reverse digits; isPalindrome(n)
-#   then input, validate, print message
+# Question 3
 def f3():
-    # TODO: implement question 3 :contentReference[oaicite:2]{index=2}
-    pass
+    def reverseNumber(n):
+        s = str(abs(n))
+        return int(s[::-1])
+
+    def isPalindrome(n):
+        return n >= 0 and n == reverseNumber(n)
+
+    n_str = input("Enter a non-negative integer n: ")
+    if not n_str.isdigit():
+        print("ERROR: Input number is incorrect!")
+        return
+
+    n = int(n_str)
+    if isPalindrome(n):
+        print(f"{n} is a palindrome")
+    else:
+        print(f"{n} is not a palindrome")
+
+
 
 #
-# Question 4: series‐sum m(n)
-#   pure function m(n) for ∑_{i=1}ⁿ 1/(i+1)
-#   then input, validate, loop printing i and m(i)
+# Question 4
 def f4():
-    # TODO: implement question 4 :contentReference[oaicite:3]{index=3}
-    pass
+    def m(n):
+        return sum(1/(i+1) for i in range(1, n+1))
+
+    n_str = input("Enter a positive integer n: ")
+    if not n_str.isdigit() or int(n_str) <= 0:
+        print("ERROR: Input number is incorrect!")
+        return
+
+    n = int(n_str)
+    for i in range(1, n+1):
+        print(f"{i}: {m(i)}")
+
+
 
 #
-# Question 5: add3dicts
-#   pure function add3dicts(d1, d2, d3)
-#   then input three dicts, validate, print merged dict
+# Question 5
 def f5():
-    # TODO: implement question 5 :contentReference[oaicite:4]{index=4}
-    pass
+    import ast
 
+    def add3dicts(d1, d2, d3):
+        result = {}
+        for d in (d1, d2, d3):
+            for k, v in d.items():
+                result[k] = result.get(k, 0) + v
+        return result
 
+    d1_str = input("Enter dict d1 (e.g. {'a':1, 'b':2}): ")
+    d2_str = input("Enter dict d2 (e.g. {'a':3, 'c':4}): ")
+    d3_str = input("Enter dict d3 (e.g. {'b':5, 'd':6}): ")
+
+    try:
+        d1 = ast.literal_eval(d1_str)
+        d2 = ast.literal_eval(d2_str)
+        d3 = ast.literal_eval(d3_str)
+    except (ValueError, SyntaxError):
+        print("ERROR: One of the inputs is not a valid dictionary!")
+        return
+
+    if not all(isinstance(d, dict) for d in (d1, d2, d3)):
+        print("ERROR: All inputs must be dictionaries!")
+        return
+
+    merged = add3dicts(d1, d2, d3)
+    print(merged)
 
 
 
@@ -124,7 +198,7 @@ if __name__ == '__main__':
             print("Bye!")
             break
         elif choice in functions:
-            print()   # blank line before running
+            print()  # blank line before running
             functions[choice]()
         else:
             print("Invalid choice, try again.")
