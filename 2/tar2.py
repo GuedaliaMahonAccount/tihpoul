@@ -6,7 +6,7 @@
 
 
 
-
+from functools import reduce
 
 #
 # question 1
@@ -20,7 +20,7 @@ def f1():
         return [getPentaNum(i) for i in range(n1, n2)]
 
     # b
-    def part_b_pentaNumRange():
+    def part_b():
         n1 = int(input("Enter n1 (lower): "))
         n2 = int(input("Enter n2 (upper): "))
 
@@ -28,32 +28,29 @@ def f1():
             print("ERROR: the values must be positive integers and n2 > n1")
             return
 
-        def getPentaNum(n):
-            return (n * (3 * n - 1)) // 2
-
+        numbers = pentaNumRange(n1, n2)
+        # print all the numbers, but go to next line, every 10
         count = 0
-        for i in range(n1, n2):
-            print(getPentaNum(i), end='  ')
+        for i in numbers:
+            print(i , end='  ')
             count += 1
-            if count % 10 == 0:
+            if ((count%10) == 0):
                 print()
-
-        if count % 10 != 0:
-            print()
 
     # c
     def part_c():
-        n1 = int(input("Enter n1 (lower): "))
-        n2 = int(input("Enter n2 (upper): "))
+        n1 = int(input("  lower bound n1: "))
+        n2 = int(input("  upper bound n2: "))
 
         if n1 <= 0 or n2 <= 0 or n2 <= n1:
             print("ERROR: the values must be positive integers and n2 > n1.")
-            return
+        else:
+            result = pentaNumRange(n1, n2)
 
-        getPentaNum = lambda n: (n * (3 * n - 1)) // 2
-        numbers = list(map(getPentaNum, range(n1, n2)))
-        lines = [numbers[i:i + 10] for i in range(0, len(numbers), 10)]
-        list(map(lambda line: print("  ".join(map(str, line))), lines))
+            chunk_list = lambda lst, size: list(map(lambda i: lst[i:i + size], range(0, len(lst), size)))
+
+            list(map(lambda line: print("  ".join(map(str, line))), chunk_list(result, 10)))
+
 
     # menu for question 1
     while True:
@@ -64,13 +61,9 @@ def f1():
         choice = input("Choose part [b/c/x]: ").lower()
 
         if choice == 'b':
-            part_b_pentaNumRange()
-
+            part_b()
         elif choice == 'c':
-            n1 = int(input("  lower bound n1: "))
-            n2 = int(input("  upper bound n2: "))
-            result = pentaNumRange(n1, n2)
-            print("  →", result)
+            part_c()
         elif choice == 'x':
             break
 
@@ -78,54 +71,50 @@ def f1():
             print("  invalid choice, try again")
 
 
-
-
-
 #
 # question 2
 def f2():
-    def sumDigits(n):
-        # take absolute value, convert to string, map each char back to int, and sum
-        return sum(map(int, str(abs(n))))
+    def Positivenumber(n):
+        return abs(n)
 
-    n_str = input("Enter an integer number n (positive or negative): ")
-    # manual validation instead of try/except
-    if not n_str.lstrip('-').isdigit():
+    def sumDigits(n):
+        if n < 0:
+            y = Positivenumber(n)
+            return sum(int(digit) for digit in str(y))
+        else:
+            return sum(int(digit) for digit in str(n))
+        pass
+
+    try:
+       n=int(input("Enter an integer number n (positive or negative): "))
+    except ValueError:
         print("ERROR: Input number is incorrect!")
         return
-
-    n = int(n_str)
-    result = sumDigits(n)
-    print(result)
-
-
-
-
+    print(sumDigits(n))
 
 
 
 #
 # question 3
 def f3():
-    def reverseNumber(n):
-        s = str(abs(n))
-        return int(s[::-1])
+    def Positivenumber(n):
+        return abs(n)
+    def isPalindrom(n):
+        y = Positivenumber(n)
+        reversed_n = int(str(y)[::-1])
+        if n == reversed_n:
+            return "It is a palindrome"
+        else:
+            return "It is not a palindrome"
 
-    def isPalindrome(n):
-        return n >= 0 and n == reverseNumber(n)
+    pass
 
-    n_str = input("Enter a non-negative integer n: ")
-    if not n_str.isdigit():
-        print("ERROR: Input number is incorrect!")
-        return
-
-    n = int(n_str)
-    if isPalindrome(n):
-        print(f" is a palindrome")
-    else:
-        print(f" is not a palindrome")
-
-
+    try:
+     n = int(input("Enter an integer number n (positive or negative): "))
+    except ValueError:
+         print("ERROR: Input number is incorrect!")
+         return
+    print(isPalindrom(n))
 
 
 
@@ -133,60 +122,54 @@ def f3():
 # question 4
 def f4():
     def m(n):
-        return sum(map(lambda i: i/(i+1), range(1, n+1)))
+        get_term = lambda i: i / (i + 1)
+        return sum(map(get_term, range(1, n + 1)))
 
-    n_str = input("Enter a positive integer n: ")
-    if not n_str.isdigit() or int(n_str) <= 0:
+    try:
+        n = int(input("Enter a Natural number n: "))
+        if n <= 0:
+            raise ValueError
+    except ValueError:
         print("ERROR: Input number is incorrect!")
         return
-
-    n = int(n_str)
-    for i in range(1, n+1):
+    for i in range(1, n + 1):
         print(i, m(i))
-
-
-
-
-
+    pass
 
 
 
 #
 # question 5
 def f5():
+    # Helper: Get the union of all keys from a list of dictionaries
+    get_all_keys = lambda dicts: reduce(lambda acc, d: acc | set(d), dicts, set())
+
+    # Helper: Collect all values for a given key from all dictionaries
+    get_values_for_key = lambda k, dicts: list({d[k] for d in dicts if k in d})
+
+    # Pure function: Merge three dictionaries as specified
     def add3dicts(d1, d2, d3):
-        all_keys = set(d1) | set(d2) | set(d3)
-        merged = {}
-        for k in all_keys:
-            vals = []
-            if k in d1: vals.append(d1[k])
-            if k in d2: vals.append(d2[k])
-            if k in d3: vals.append(d3[k])
-            seen = []
-            for v in vals:
-                if v not in seen:
-                    seen.append(v)
-            merged[k] = seen[0] if len(seen) == 1 else tuple(seen)
-        return merged
+        dicts = (d1, d2, d3)
+        all_keys = get_all_keys(dicts)
+        merge_value = lambda vals: vals[0] if len(vals) == 1 else tuple(vals)
+        return dict(map(lambda k: (k, merge_value(get_values_for_key(k, dicts))), all_keys))
 
-    try:
-        d1 = eval(input("Enter a dictionary: "))
-        d2 = eval(input("Enter a dictionary: "))
-        d3 = eval(input("Enter a dictionary: "))
-    except Exception:
-        print("ERROR: Input is incorrect!")
-        return
+    # Read dictionary input and validate it
+    def read_dict_eval():
+        try:
+            d = eval(input("Enter a dictionary: "))
+            if not isinstance(d, dict):
+                raise ValueError
+            return d
+        except:
+            print("ERROR: Input is incorrect!")
+            exit()
 
-    if not all(isinstance(d, dict) for d in (d1, d2, d3)):
-        print("ERROR: Input is incorrect!")
-        return
-
-    result = add3dicts(d1, d2, d3)
-    print(result)
-
-
-
-
+    d1 = read_dict_eval()
+    d2 = read_dict_eval()
+    d3 = read_dict_eval()
+    print(add3dicts(d1, d2, d3))
+    pass
 
 
 
