@@ -110,8 +110,131 @@ def f2():
 #
 #f3
 def f3():
-    print("Hello world!")
+    def reverseList(n):
+        if isinstance(n, str):
+            return n[::-1]
+        elif isinstance(n, list):
+            return [reverseList(elem) for elem in n[::-1]]
+        elif isinstance(n, tuple):
+            return tuple(reverseList(elem) for elem in n[::-1])
+        else:
+            return n
 
+    def isPalindrome(seq):
+        return seq == reverseList(seq)
+
+    while True:
+        x = input("Enter a Python list literal (or '0' to exit): ").strip()
+        if x == '0':
+            break
+        try:
+            lst = ast.literal_eval(x)
+            if not isinstance(lst, list):
+                raise ValueError
+            if isPalindrome(lst):
+                print("It is a palindrome")
+            else:
+                print("It is not a palindrome")
+        except Exception:
+            print("Invalid input. Please enter a valid Python list literal.")
+
+
+#
+#f4
+def f4():
+
+    def twinp(n):
+        def sieve(lst):
+            if not lst:
+                return []
+            p = lst[0]
+            return [p] + sieve([x for x in lst[1:] if x % p != 0])
+
+        primes = sieve(list(range(2, n)))
+        return {p: p + 2 for p in primes if (p + 2) in primes}
+
+
+    while True:
+        x = input("Enter a Natural number n (or '-1' to exit): ").strip()
+        if x == '-1':
+            break
+        try:
+            n = int(x)
+            if n <= 0:
+                print("ERROR: Input number is incorrect!")
+            else:
+                twins = twinp(n)
+                for a, b in sorted(twins.items()):
+                    print(a, b)
+        except ValueError:
+            print("ERROR: Input number is incorrect!")
+
+
+#
+#f5
+def f5():
+
+    def dicts3add(d1, d2, d3):
+        keys1, keys2, keys3 = set(d1), set(d2), set(d3)
+        all_keys = keys1 | keys2 | keys3
+        multi = {k for k in all_keys
+                 if sum(k in s for s in (keys1, keys2, keys3)) > 1}
+        result = {}
+        for k in multi:
+            vals = ()
+            if k in d1: vals += (d1[k],)
+            if k in d2: vals += (d2[k],)
+            if k in d3: vals += (d3[k],)
+            vals = tuple(dict.fromkeys(vals).keys())
+            result[k] = vals
+        for k in all_keys - multi:
+            if k in d1:
+                result[k] = d1[k]
+            elif k in d2:
+                result[k] = d2[k]
+            else:
+                result[k] = d3[k]
+        return result
+
+    while True:
+        s1 = input("Enter a dictionary (or '0' to exit): ").strip()
+        if s1 == '0':
+            break
+        s2 = input("Enter a dictionary (or '0' to exit): ").strip()
+        if s2 == '0':
+            break
+        s3 = input("Enter a dictionary (or '0' to exit): ").strip()
+        if s3 == '0':
+            break
+
+        try:
+            try:
+                d1 = ast.literal_eval(s1)
+            except (ValueError, SyntaxError):
+                d1 = eval(s1,
+                          {'__builtins__': None},
+                          {'dict': dict})
+            try:
+                d2 = ast.literal_eval(s2)
+            except (ValueError, SyntaxError):
+                d2 = eval(s2,
+                          {'__builtins__': None},
+                          {'dict': dict})
+            try:
+                d3 = ast.literal_eval(s3)
+            except (ValueError, SyntaxError):
+                d3 = eval(s3,
+                          {'__builtins__': None},
+                          {'dict': dict})
+
+            if not all(isinstance(d, dict) for d in (d1, d2, d3)):
+                raise ValueError
+
+            merged = dicts3add(d1, d2, d3)
+            print(sorted(merged.items()))
+
+        except Exception:
+            print("ERROR: Input is incorrect!")
 
 
 
@@ -126,8 +249,8 @@ if __name__ == '__main__':
         '1': f1,
         '2': f2,
         '3': f3,
-        #'4': f4,
-        # '5': f5,
+        '4': f4,
+        '5': f5,
     }
 
     print("Welcome to Targil 4")
